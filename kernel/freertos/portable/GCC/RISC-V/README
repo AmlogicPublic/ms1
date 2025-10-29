@@ -1,0 +1,81 @@
+
+/*
+ * FreeRTOS RISC-V 移植层汇编实现 - 完整时间顺序执行流程
+ *
+ * === 系统启动阶段（按时间顺序）===
+ * 系统复位 → startup.S _start → 初始化堆栈和BSS
+ * _start → System_Init(soc_system.c:1436) 
+ * System_Init() → Exception_Init() - 初始化SystemExceptionHandlers[]为默认handler
+ * System_Init() → Interrupt_Init() → ECLIC_Interrupt_Init()
+ * ECLIC_Interrupt_Init() 配置CSR入口表：
+ *     CSR_MTVT = vector_base (Vector模式跳转表地址)
+ *     CSR_MTVT2 = irq_entry | 0x1 (Non-Vector统一入口地址+模式位)
+ *     CSR_MTVEC = exc_entry | 0x3 (异常处理入口地址+模式位)  
+ * ECLIC_Interrupt_Init() → irq_init(irq.c:145)
+ * irq_init() → soc_irq_mode_init() - 设置SOC IRQ MODE寄存器全为0(边沿触发)
+ * irq_init() → __RV_CSR_SET(CSR_MIE, MIE_MEIE) - 开启外部中断使能
+ * irq_init() → __RV_CSR_SET(CSR_MSTATUS, MSTATUS_MIE) - 开启全局中断
+ * irq_init() → 逐个调用soc_register_interrupt()注册具体中断：
+ *     SysTimerSW_IRQn: VECTOR模式,优先级2 → 直达vector_base[3]
+ *     SysTimer_IRQn: VECTOR模式,优先级7 → 直达vector_base[7] 
+ *     InterCore_IRQn: NON-VECTOR模式,优先级2 → irq_entry分发
+ * soc_register_interrupt() → ECLIC_Register_IRQ() → 配置ECLIC寄存器：
+ *      ECLIC_SetShvIRQ() - 设置Vector/Non-Vector模式
+ *      ECLIC_SetTrigIRQ() - 设置触发方式
+ *      ECLIC_SetLevelIRQ() - 设置中断级别  
+ *      ECLIC_SetPriorityIRQ() - 设置优先级
+ *      ECLIC_SetVector() - Vector模式时设置vector_base[IRQn]地址
+ *      ECLIC_EnableIRQ() - 使能该中断
+ * irq_init() → uart_irq_init() - 注册UART中断为NON-VECTOR模式
+ * System_Init() → main() → vTaskStartScheduler() → prvPortStartFirstTask
+ *
+ * === FreeRTOS启动第一个任务（prvPortStartFirstTask）===
+ * 设置CSR_MSCRATCH = _sp (中断栈指针)
+ * 加载pxCurrentTCB → 获取第一个任务的栈指针
+ * 从任务栈恢复所有寄存器状态 (x1,x5-x31)
+ * 从任务栈恢复CSR_MEPC (任务入口地址)
+ * 从任务栈恢复CSR_MSTATUS (任务状态)  
+ * mret → PC跳转到任务入口,任务开始运行,中断系统激活
+ *
+ * === Non-Vector中断处理完整流程（以UART中断为例）===
+ * UART硬件产生中断信号 → SOC IRQ控制器
+ * SOC IRQ控制器 → ECLIC仲裁器判断优先级
+ * ECLIC决定使用Non-Vector模式（因为UART注册时指定NON-VECTOR）
+ * ECLIC硬件自动保存：mstatus.MPIE←MIE, MIE←0, mepc←当前PC, mcause←IRQ号
+ * ECLIC硬件跳转：PC ← CSR_MTVT2 (即irq_entry地址)
+ * irq_entry开始执行：
+ *      SAVE_CONTEXT - 切换到中断栈,保存x1,x4-x31到栈
+ *      csrrwi x0, CSR_PUSHMCAUSE, 17 - 硬件直接保存mcause到sp[17]  
+ *      csrrwi x0, CSR_PUSHMEPC, 18 - 硬件直接保存mepc到sp[18]
+ *      csrrwi x0, CSR_PUSHMSUBM, 19 - 硬件直接保存msubm到sp[19]
+ * DISABLE_MIE - 确保中断禁用（防嵌套）
+ * 从mcause提取12位IRQ ID：csrr a0, mcause; and a0, a0, 0xfff
+ * 立即清除ECLIC pending：call clear_eclic_interrupt(IRQ_ID)  
+ * 调用C分发器：call core_intexc_handler(IRQ_ID, sp)
+ * core_intexc_handler() 检查mcause & MCAUSE_INTR → 确认是中断
+ * 在ECLIC模式下system_core_interrupt_handler=NULL,中断处理完成
+ *      (因为ECLIC硬件已完成分发,无需软件二次查表)
+ * 从core_exception_handler返回到irq_entry
+ * irq_entry恢复CSR（逆序）：
+ *      LOAD x5, 19*REGBYTES(sp); csrw CSR_MSUBM, x5
+ *      LOAD x5, 18*REGBYTES(sp); csrw CSR_MEPC, x5  
+ *      LOAD x5, 17*REGBYTES(sp); csrw CSR_MCAUSE, x5
+ * RESTORE_CONTEXT - 恢复所有通用寄存器,切换回任务栈
+ * mret → ECLIC硬件自动恢复mstatus.MIE,PC跳转回mepc,任务继续运行
+ *
+ * === 异常处理完整流程（exc_entry）===
+ * 同步异常发生（如非法指令）→ 硬件自动保存状态 → PC跳转exc_entry
+ * exc_entry: SAVE_CONTEXT + 传统SAVE_CSR_CONTEXT保存mcause/mepc
+ * call core_intexc_handler(mcause, sp)
+ * core_intexc_handler() → 查找SystemExceptionHandlers[exccode] → 调用具体异常处理器
+ * 异常处理完成 → 返回exc_entry → RESTORE_CSR_CONTEXT + RESTORE_CONTEXT → mret
+ *
+ * === FreeRTOS任务切换完整流程（eclic_msip_handler）===  
+ * 软件触发核间中断 → ECLIC → 硬件跳转eclic_msip_handler (Vector模式)
+ * 手动保存当前任务所有寄存器到任务栈
+ * STORE sp, 0(pxCurrentTCB) - 保存当前任务栈指针到TCB
+ * call xPortTaskSwitch() - FreeRTOS调度算法选择新任务
+ * LOAD sp, 0(pxCurrentTCB) - 加载新任务栈指针  
+ * 从新任务栈恢复所有寄存器状态
+ * mret → 跳转到新任务,完成任务切换
+ */

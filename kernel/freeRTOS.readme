@@ -1,0 +1,133 @@
+Below is a plain ASCII text list of the extended FreeRTOS OS interfaces. Note that this list is based on the general FreeRTOS distribution and may vary slightly with version or configuration.
+
+------------------------------------------------------------
+FREE_RTOS OS INTERFACES - EXTENDED LIST (ASCII FORMAT)
+------------------------------------------------------------
+
+1. TASK MANAGEMENT
+   ----------------
+   a. Task Creation and Deletion:
+      - xTaskCreate()
+      - xTaskCreateStatic()
+      - vTaskDelete()
+
+   b. Task Control & State Management:
+      - vTaskDelay()
+      - vTaskDelayUntil()
+      - vTaskSuspend()
+      - vTaskResume()
+      - taskYIELD()    (voluntary yield)
+      - vTaskPrioritySet()
+      - uxTaskPriorityGet()
+      - xTaskNotify(), xTaskNotifyGive(), ulTaskNotifyTake()
+      - vTaskSuspendAll(), xTaskResumeAll()
+      - uxTaskGetNumberOfTasks()
+      - vTaskGetInfo()          (for task details)
+      - vTaskGetRunTimeStats()  (for execution statistics)
+      - Trace macros (e.g., traceTASK_SWITCHED_IN())
+
+2. INTER-TASK COMMUNICATION
+   --------------------------
+   a. Queues:
+      - xQueueCreate()
+      - xQueueSend()
+      - xQueueSendToBack()
+      - xQueueSendToFront()
+      - xQueueReceive()
+      - xQueuePeek()
+      (Plus additional queue management functions)
+
+   b. Direct-to-Task Notifications:
+      - (Integrated into task APIs as lightweight signaling)
+
+   c. Message Buffers:
+      - xMessageBufferCreate()
+      - xMessageBufferSend()
+      - xMessageBufferReceive()
+
+   d. Stream Buffers:
+      - xStreamBufferCreate()
+      - xStreamBufferSend()
+      - xStreamBufferReceive()
+
+3. SYNCHRONIZATION MECHANISMS
+   ----------------------------
+   a. Semaphores:
+      - xSemaphoreCreateBinary()
+      - xSemaphoreTake()
+      - xSemaphoreGive()
+      - xSemaphoreCreateCounting()
+      - ISR Variants: xSemaphoreGiveFromISR(), xSemaphoreTakeFromISR()
+
+   b. Mutexes:
+      - xSemaphoreCreateMutex()
+      - xSemaphoreCreateRecursiveMutex()
+      - xSemaphoreTakeRecursive()
+      - xSemaphoreGiveRecursive()
+
+   c. Event Groups:
+      - xEventGroupCreate()
+      - xEventGroupSetBits()
+      - xEventGroupClearBits()
+      - xEventGroupWaitBits()
+      - (Includes ISR-safe variants)
+
+4. TIME MANAGEMENT
+   -----------------
+   a. Software Timers:
+      - xTimerCreate()
+      - xTimerStart()
+      - xTimerStop()
+      - xTimerReset()
+      - xTimerChangePeriod()
+      (Timers run in their own timer task context)
+
+   b. Hook Functions:
+      - vApplicationTickHook()       (called at each RTOS tick)
+      - vApplicationIdleHook()       (called when idle)
+      - vApplicationMallocFailedHook() (called on allocation failure)
+
+5. MEMORY MANAGEMENT
+   -------------------
+   a. Dynamic Memory Allocation Schemes:
+      - heap_1 (simplest: allocation only, no free)
+      - heap_2 (allows allocation and freeing, basic coalescing)
+      - heap_3 (wraps standard C library malloc/free)
+      - heap_4 (improved coalescence, reduced fragmentation)
+      - heap_5 (supports multiple non-contiguous regions)
+
+   b. Core Allocation APIs:
+      - pvPortMalloc()
+      - vPortFree()
+
+6. INTERRUPT HANDLING & ISR-SAFE INTERFACES
+   ------------------------------------------
+   - xQueueSendFromISR()
+   - xQueueReceiveFromISR()
+   - xSemaphoreGiveFromISR()
+   - xTaskNotifyFromISR()
+   - (Other ISR-safe versions as needed)
+
+7. PORTABILITY & HARDWARE ABSTRACTION
+   ------------------------------------
+   a. Port Layer:
+      - Context Switching (assembly routines/intrinsic functions)
+      - Critical Section Management (enter/exit critical sections)
+      - System Tick Configuration (timer setup for RTOS tick)
+
+   b. Architecture-Specific Utilities:
+      - CPU/Compiler-specific macros and utilities found in the "portable" folder
+
+8. OPTIONAL & DEBUG/TRACE UTILITIES
+   ---------------------------------
+   a. Run-Time Stats and Tracing:
+      - vTaskGetRunTimeStats()  (for task execution times)
+      - Trace macros/hooks for third-party tools integration
+
+   b. Additional Utilities:
+      - Internal list and queue utilities (for debugging/tuning)
+      - configASSERT() macro (to catch programming/configuration errors)
+
+------------------------------------------------------------
+Note: This list is as complete as possible for the core and common optional interfaces in FreeRTOS. Specific versions or additional modules (e.g., TCP/IP stacks, file systems) may introduce more interfaces.
+------------------------------------------------------------

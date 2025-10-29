@@ -1,0 +1,45 @@
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| Feature                    | FreeRTOS                                                 | RT-Thread                                                  |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Kernel Type**            | Lightweight RTOS with minimal footprint                  | Modular RTOS with a microkernel design and middleware support|
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Architecture**           | Monolithic kernel with static configuration              | Component-based design with dynamic configurability         |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Modularity**             | Extensions manually added                                 | Highly modular with built-in middleware support            |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Supported Platforms**    | Wide MCU support (ARM Cortex-M, RISC-V, etc.)            | Supports various MCUs (8/16/32-bit and some 64-bit cores)   |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Task Management**        | Basic task creation, deletion, scheduling with priorities| Similar task management with enhanced thread control       |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Threading Model**        | Lightweight threads mapped to tasks                      | Full POSIX-style thread model with priority and IPC support |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Scheduling**             | Preemptive (default) and cooperative                     | Preemptive, cooperative, and round-robin                   |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Inter-task Communication** | Queues, semaphores, mutexes, event groups             | Queues, semaphores, mutexes, mailboxes, signals, pipes      |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Memory Management**      | Static and dynamic memory allocation                     | Static, dynamic, and TLSF-based memory management          |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Memory Footprint**       | Small, optimized for constrained devices                 | Slightly larger due to additional features                  |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Resource Management**    | Simple API, lightweight overhead                         | Richer API with more synchronization primitives            |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **File System Support**    | Limited (via third-party extensions)                     | Built-in FAT, POSIX file system support                     |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Networking Stack**       | Lightweight TCP/IP via FreeRTOS+TCP or LWIP              | Built-in LWIP, MQTT, PPP, etc.                              |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Peripheral Support**     | Requires manual driver integration                       | Native drivers and middleware for peripherals              |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Development Ecosystem**  | Extensive community, many examples, numerous ports       | Growing community with comprehensive documentation         |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Licensing**              | MIT License (very permissive)                            | Apache License 2.0 (also permissive)                        |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Security Features**      | Basic MPU support for memory isolation                   | MPU support, SELinux-like permissions for tasks             |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Power Management**       | Tickless idle mode for low power consumption             | Power management framework for dynamic frequency scaling    |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Additional Features**    | Minimalistic, real-time deterministic behavior           | Enhanced middleware (file systems, network stacks, GUI, AI) |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Ease of Use**            | Simple API, beginner-friendly                            | More flexible but slightly more complex                     |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+
+| **Community & Ecosystem**  | Mature with extensive third-party support                | Active and evolving, strong adoption in China & globally    |
++----------------------------+------------------------------------------------------------+--------------------------------------------------------------+

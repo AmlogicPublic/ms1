@@ -1,0 +1,64 @@
+{
+    "general_config": {
+        "ddr": {
+                "base":"0xe0000000",
+                "size":"0x4000000"
+        },
+        "ilm": {
+                "base":"0xf9000000",
+                "size":"0x8000"
+        },
+        "dlm": {
+                "base":"0xf9008000",
+                "size":"0x8000"
+        },
+        "sram": {
+                "base":"0xf4000000",
+                "size":"0x200000"
+        },
+        "norflash": {
+                "base":"0xf0000000",
+                "size":"0x3FFFFFF"
+        },
+        "uart0": {
+                "base":"0xfe020000",
+                "irq":"5"
+        },
+        "uart1": {
+                "base":"0xfe030000",
+                "irq":"5"
+        },
+        "qspi0": {
+                "base":"0xfe0b0000",
+                "irq":"6"
+        },
+        "qspi2": {
+                "base":"0xfe0c0000",
+                "irq":"6"
+        },
+        "iregion": {
+                "base":"0xf8000000",
+                "size":"0x1000000"
+        },
+        "cpu_freq":"50000000",
+        "timer_freq":"32768",
+        "irqmax":"100"
+    },
+    "download": {
+        "ilm": {
+                "startaddr":"0xf9000000"
+        },
+        "flashxip": {
+                "startaddr":"0xf1000000"
+        },
+        "flash": {
+                "startaddr":"0xf0000000"
+        },
+        "sram": {
+                "startaddr":"0xf4000000"
+        },
+        "ddr": {
+                "startaddr":"0xe0000000"
+        }
+    }
+}
