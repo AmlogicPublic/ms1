@@ -29,7 +29,7 @@ from I2C_shell import interactive_loop
 BOOT_FROM = "sram"  # Options: "sram", "flash"
 
 # On-end behavior
-END_MODE = "uart_shell"  # Options: "uart_shell", "i2c_shell"
+END_MODE = "i2c_shell"  # Options: "uart_shell", "i2c_shell"
 
 # I2C settings
 I2C_RATE = IIC_Rate_1M  # Options: IIC_Rate_100K, 200K, 400K, 600K, 800K, 1M

@@ -73,6 +73,11 @@ int main(void) {
 
   printf("Start Scheduler...\r\n");
 
+  Wr(EE_SYSCTRL_VGD_CTRL, 0xffffffff);
+  int rdata;
+  rdata = Rd(EE_SYSCTRL_VGD_CTRL);
+  printf("EE_SYSCTRL_VGD_CTRL: 0x%x\r\n", rdata);
+
   // vTaskStartScheduler();
   while (1)
     ;
