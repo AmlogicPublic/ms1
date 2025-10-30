@@ -6,20 +6,18 @@ def bin2mem(input_file, output_file):
         binary_data = f.read()
     
     with open(output_file, 'w') as f:
-        # Read 4 bytes at a time (32-bit words)
+        # Read 8 bytes at a time (two 32-bit words)
         for i in range(0, len(binary_data), 8):
             chunk = binary_data[i:i+8]
-            
             # Pad with zeros if less than 8 bytes
             if len(chunk) < 8:
                 chunk = chunk + b'\x00' * (8 - len(chunk))
-            
-            # Unpack as little-endian 64-bit unsigned integer
-            word = struct.unpack('<I', chunk)[0]
-            
-            # Write as 8-digit hexadecimal (without 0x prefix)
-            f.write(f'{word:08x}\n')
-
+            # Low word (first 4 bytes, little-endian)
+            word1 = struct.unpack('<I', chunk[0:4])[0]
+            # High word (next 4 bytes, little-endian)
+            word2 = struct.unpack('<I', chunk[4:8])[0]
+            # Concatenate the two words, each as 8 hex digits
+            f.write(f'{word1:08x}{word2:08x}\n')
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
