@@ -60,6 +60,7 @@ set(CMAKE_AR "${TOOLCHAIN_PATH}/bin/riscv64-unknown-elf-ar.exe")
 set(CMAKE_RANLIB "${TOOLCHAIN_PATH}/bin/riscv64-unknown-elf-ranlib.exe")
 set(PYTHON_EXE "${CMAKE_SOURCE_DIR}/../../Software/python312/python.exe")
 set(BIN2MEM_SCRIPT "${CMAKE_SOURCE_DIR}/bin/bin2mem.py")
+set(BIN2MEM_SHARERAM_SCRIPT "${CMAKE_SOURCE_DIR}/bin/bin2mem_shareram.py")
 
 # Cross-compilation settings moved to top of file
 
@@ -276,6 +277,7 @@ add_custom_command(
     COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:ms1> "${CMAKE_BINARY_DIR}/ms1.hex"
     COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:ms1> "${CMAKE_BINARY_DIR}/ms1.bin"
     COMMAND ${PYTHON_EXE} ${BIN2MEM_SCRIPT} ${CMAKE_BINARY_DIR}/ms1.bin ${CMAKE_BINARY_DIR}/ms1.mem
+    COMMAND ${PYTHON_EXE} ${BIN2MEM_SHARERAM_SCRIPT} ${CMAKE_BINARY_DIR}/ms1.bin ${CMAKE_BINARY_DIR}/ms1_shareram.mem
     COMMAND ${CMAKE_OBJDUMP} --source --all-headers --demangle --line-numbers --wide $<TARGET_FILE:ms1> > "${CMAKE_BINARY_DIR}/ms1.lst"
     COMMAND ${CMAKE_SIZE} -A $<TARGET_FILE:ms1>
     COMMENT "Image(Main): Generating hex file, disassembly listing, and size information"

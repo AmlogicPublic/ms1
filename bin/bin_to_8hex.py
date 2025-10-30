@@ -20,7 +20,6 @@ def bin2mem(input_file, output_file):
             # Write as 8-digit hexadecimal (without 0x prefix)
             f.write(f'{word:08x}\n')
 
-
 if __name__ == '__main__':
     if len(sys.argv) != 3:
         print(f'Usage: {sys.argv[0]} <input.bin> <output.mem>')
