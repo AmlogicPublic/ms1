@@ -115,5 +115,6 @@ echo ========================================
 echo.
 echo Starting Cursor...
 start /min "" cmd /c ""%ROOT_DIR%\Software\cursor\Cursor.exe" "%PROJECT_DIR%" --extensions-dir="%ROOT_DIR%\Software\data\extensions""
-timeout /t 10 /nobreak >nul
+echo Closing in 5 seconds...
+timeout /t 5 /nobreak >nul
 exit /b
