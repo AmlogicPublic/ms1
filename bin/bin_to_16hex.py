@@ -16,8 +16,8 @@ def bin2mem(input_file, output_file):
             word1 = struct.unpack('<I', chunk[0:4])[0]
             # High word (next 4 bytes, little-endian)
             word2 = struct.unpack('<I', chunk[4:8])[0]
-            # Concatenate the two words, each as 8 hex digits
-            f.write(f'{word1:08x}{word2:08x}\n')
+            # Concatenate the two words, each as 8 hex digits (high word on left, low word on right)
+            f.write(f'{word2:08x}{word1:08x}\n')
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
