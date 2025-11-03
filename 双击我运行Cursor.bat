@@ -20,9 +20,9 @@ echo.
 :: ============================================================
 :: Setup portable environment
 :: ============================================================
-if not exist "%ROOT_DIR%\Software\data\Local\Programs\cursor" mkdir "%PROJECT_DIR%\Software\data\Local\Programs\cursor"
-if not exist "%ROOT_DIR%\Software\data\Roaming\Cursor" mkdir "%PROJECT_DIR%\Software\data\Roaming\Cursor"
-if not exist "%ROOT_DIR%\Software\data\extensions" mkdir "%PROJECT_DIR%\Software\data\extensions"
+if not exist "%ROOT_DIR%\Software\data\Local\Programs\cursor" mkdir "%ROOT_DIR%\Software\data\Local\Programs\cursor"
+if not exist "%ROOT_DIR%\Software\data\Roaming\Cursor" mkdir "%ROOT_DIR%\Software\data\Roaming\Cursor"
+if not exist "%ROOT_DIR%\Software\data\extensions" mkdir "%ROOT_DIR%\Software\data\extensions"
 
 set "APPDATA=%ROOT_DIR%\Software\data\Roaming"
 set "LOCALAPPDATA=%ROOT_DIR%\Software\data\Local"
@@ -32,9 +32,8 @@ set "LOCALAPPDATA=%ROOT_DIR%\Software\data\Local"
 :: ============================================================
 echo [1/4] Generating .clangd...
 
-:: Convert path for clangd: E:\Projects/ms1 format
+:: Convert path for clangd: Projects/ms1 format (Unix-style)
 set "PROJECT_DIR_CLANGD=%PROJECT_DIR:\=/%"
-set "PROJECT_DIR_CLANGD=%PROJECT_DIR_CLANGD::/=:\%"
 
 cd /d "%PROJECT_DIR%" && del .clangd 2>nul
 (
@@ -92,12 +91,16 @@ echo.
 :: ============================================================
 echo [3/4] Updating Cursor User settings.json...
 if not exist "%ROOT_DIR%\Software\data\Roaming\Cursor\User" mkdir "%ROOT_DIR%\Software\data\Roaming\Cursor\User"
+
+:: Escape backslashes for JSON format
+set "ROOT_DIR_JSON=%ROOT_DIR:\=\\%"
+
 (
   echo {
   echo   "cursor.general.disableHttp2": true,
   echo   "workbench.colorTheme": "Default Dark Modern",
-  echo   "git.path": "%ROOT_DIR%\Software\\PortableGit\\bin\\git.exe",
-  echo   "clangd.path": "%ROOT_DIR%\Software\\data\\Roaming\\Cursor\\User\\globalStorage\\llvm-vs-code-extensions.vscode-clangd\\install\\21.1.0\\clangd_21.1.0\\bin\\clangd.exe"
+  echo   "git.path": "%ROOT_DIR_JSON%\\Software\\PortableGit\\bin\\git.exe",
+  echo   "clangd.path": "%ROOT_DIR_JSON%\\Software\\data\\Roaming\\Cursor\\User\\globalStorage\\llvm-vs-code-extensions.vscode-clangd\\install\\21.1.0\\clangd_21.1.0\\bin\\clangd.exe"
   echo }
 ) > "%ROOT_DIR%\Software\data\Roaming\Cursor\User\settings.json"
 echo Done
