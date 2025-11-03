@@ -176,7 +176,7 @@ int irq_init(void) {
     return -1;
 
   /* Initialize other peripherals interrupts */
-  ret = uart_irq_init();
+  //ret = uart_irq_init();
   if (ret != 0)
     return -1;
 

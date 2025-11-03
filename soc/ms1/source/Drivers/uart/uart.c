@@ -30,7 +30,7 @@ static inline UART_TypeDef uart_get_real_regs_b(void) {
 static void clear_all_regs(void) {
   Wr(AO_PADCTRL_PIN_MUX_REG0, 0);
   Wr(AO_PADCTRL_PIN_MUX_REG1, 0);
-  Wr(AO_PADCTRL_PIN_MUX_REG2, 0);
+  //Wr(AO_PADCTRL_PIN_MUX_REG2, 0);
   Wr(AO_PADCTRL_PIN_MUX_REG3, 0);
   Wr(EE_PADCTRL_PIN_MUX_REG0, 0);
   Wr(EE_PADCTRL_PIN_MUX_REG1, 0);

@@ -73,10 +73,21 @@ int main(void) {
 
   printf("Start Scheduler...\r\n");
 
-  Wr(EE_SYSCTRL_VGD_CTRL, 0xffffffff);
+  Wr(EE_SYSCTRL_VGD_CTRL, 0x1234);
   int rdata;
   rdata = Rd(EE_SYSCTRL_VGD_CTRL);
   printf("EE_SYSCTRL_VGD_CTRL: 0x%x\r\n", rdata);
+
+  Wr(RDMA_AHB_END_ADDR_3, 0x12345678);
+  rdata = Rd(RDMA_AHB_END_ADDR_3);
+  printf("VPU RDMA_AHB_END_ADDR_3: 0x%x\r\n", rdata);
+
+  Wr(VOUT_PRE_CMPR_CTRL1, 0x4728abcd);
+  rdata = Rd(VOUT_PRE_CMPR_CTRL1);
+  printf("VOUT VOUT_PRE_CMPR_CTRL1: 0x%x\r\n", rdata);
+
+
+
 
   // vTaskStartScheduler();
   while (1)
