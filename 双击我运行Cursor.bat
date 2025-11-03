@@ -94,6 +94,7 @@ echo [3/4] Updating Cursor User settings.json...
 if not exist "%ROOT_DIR%\Software\data\Roaming\Cursor\User" mkdir "%ROOT_DIR%\Software\data\Roaming\Cursor\User"
 (
   echo {
+  echo   "cursor.general.disableHttp2": true,
   echo   "workbench.colorTheme": "Default Dark Modern",
   echo   "git.path": "%ROOT_DIR%\Software\\PortableGit\\bin\\git.exe",
   echo   "clangd.path": "%ROOT_DIR%\Software\\data\\Roaming\\Cursor\\User\\globalStorage\\llvm-vs-code-extensions.vscode-clangd\\install\\21.1.0\\clangd_21.1.0\\bin\\clangd.exe"
@@ -105,7 +106,9 @@ echo.
 :: 4. Configure Git user
 echo [4/4] Configuring Git user...
 "%ROOT_DIR%\Software\PortableGit\bin\git.exe" config --global user.name "Amlogic_Public"
+echo   user.name = Amlogic_Public
 "%ROOT_DIR%\Software\PortableGit\bin\git.exe" config --global user.email "Amlogic_Public@protonmail.com"
+echo   user.email = Amlogic_Public@protonmail.com
 echo Done
 echo.
 
