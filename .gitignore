@@ -3,3 +3,5 @@
 /toolchain
 /vpu
 **/__pycache__/
+.clangd
+.vscode/settings.json
