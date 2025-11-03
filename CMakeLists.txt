@@ -59,8 +59,8 @@ set(CMAKE_LINKER "${TOOLCHAIN_PATH}/bin/riscv64-unknown-elf-ld.exe")
 set(CMAKE_AR "${TOOLCHAIN_PATH}/bin/riscv64-unknown-elf-ar.exe")
 set(CMAKE_RANLIB "${TOOLCHAIN_PATH}/bin/riscv64-unknown-elf-ranlib.exe")
 set(PYTHON_EXE "${CMAKE_SOURCE_DIR}/../../Software/python312/python.exe")
-set(BIN2MEM_8HEX_SCRIPT "${CMAKE_SOURCE_DIR}/bin/bin_to_8hex.py")
-set(BIN2MEM_16HEX_SCRIPT "${CMAKE_SOURCE_DIR}/bin/bin_to_16hex.py")
+set(BIN2MEM_8HEX_SCRIPT "${CMAKE_SOURCE_DIR}/python/bin_to_8hex.py")
+set(BIN2MEM_16HEX_SCRIPT "${CMAKE_SOURCE_DIR}/python/bin_to_16hex.py")
 
 # Cross-compilation settings moved to top of file
 
