@@ -53,15 +53,16 @@ echo   Background: Skip
 echo Done: .clangd generated
 echo.
 
-:: 2. Update .vscode\settings.json - clangd.path
-echo [2/4] Updating .vscode\settings.json with clangd.path...
+:: 2. Update .vscode\settings.json with all required settings
+echo [2/4] Updating .vscode\settings.json with required settings...
 set "VSCODE_DIR=%SCRIPT_DIR%.vscode"
 if not exist "%VSCODE_DIR%" mkdir "%VSCODE_DIR%"
 set "VSCODE_SETTINGS=%VSCODE_DIR%\settings.json"
 set "CLANGD_PATH=%ROOT_DIR%\Software\data\Roaming\Cursor\User\globalStorage\llvm-vs-code-extensions.vscode-clangd\install\21.1.0\clangd_21.1.0\bin\clangd.exe"
+set "PYTHON_PATH=${workspaceFolder}/../../Software/python312/python.exe"
 
-powershell -Command "$ErrorActionPreference='Stop'; $path='%CLANGD_PATH%'; if (Test-Path '%VSCODE_SETTINGS%') { $content = Get-Content '%VSCODE_SETTINGS%' -Raw; if ($content.Trim()) { $json = $content | ConvertFrom-Json } else { $json = @{} } } else { $json = @{} }; $json | Add-Member -Force -MemberType NoteProperty -Name 'clangd.path' -Value $path; ($json | ConvertTo-Json -Depth 10).Replace('\\\\','\\') | Set-Content '%VSCODE_SETTINGS%' -Encoding UTF8"
-echo Done: clangd.path updated
+powershell -Command "$ErrorActionPreference='Stop'; $clangdPath='%CLANGD_PATH%'; $pythonPath='%PYTHON_PATH%'; if (Test-Path '%VSCODE_SETTINGS%') { $content = Get-Content '%VSCODE_SETTINGS%' -Raw; if ($content.Trim()) { $json = $content | ConvertFrom-Json } else { $json = @{} } } else { $json = @{} }; $json | Add-Member -Force -MemberType NoteProperty -Name 'clangd.path' -Value $clangdPath; $json | Add-Member -Force -MemberType NoteProperty -Name 'python.defaultInterpreterPath' -Value $pythonPath; if (-not $json.'files.associations') { $json | Add-Member -Force -MemberType NoteProperty -Name 'files.associations' -Value @{'*.py'='python'} } elseif (-not $json.'files.associations'.'*.py') { $json.'files.associations' | Add-Member -Force -MemberType NoteProperty -Name '*.py' -Value 'python' }; if (-not $json.'python.languageServer') { $json | Add-Member -Force -MemberType NoteProperty -Name 'python.languageServer' -Value 'None' }; ($json | ConvertTo-Json -Depth 10).Replace('\\\\','\\') | Set-Content '%VSCODE_SETTINGS%' -Encoding UTF8"
+echo Done: settings.json updated with clangd.path, python.defaultInterpreterPath, and files.associations
 echo.
 
 :: 3. Update Cursor User settings.json - git.path
