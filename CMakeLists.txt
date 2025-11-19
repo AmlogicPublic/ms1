@@ -219,6 +219,7 @@ file(GLOB_RECURSE C_SOURCES
     # "${CMAKE_SOURCE_DIR}/application/main_BareMetal.c"
     "${CMAKE_SOURCE_DIR}/application/main_FreeRTOS.c"
     "${CMAKE_SOURCE_DIR}/application/vpu_run.c"
+    "${CMAKE_SOURCE_DIR}/application/vout_run.c"
     "${CMAKE_SOURCE_DIR}/application/*.cpp"
     "${CMAKE_SOURCE_DIR}/soc/ms1/source/*.c"
     "${CMAKE_SOURCE_DIR}/soc/ms1/source/Drivers/*.c"

@@ -35,6 +35,8 @@ extern uintptr_t __StackTop, __StackLimit, __heap_start, __heap_limit;
 extern volatile uint32_t SystemCoreClock; // will be updated during boot
 extern volatile uint32_t BAUD_RATE;       // will be updated during boot
 extern void _start(void);                 // CPU reset entry point from linker script
+extern void vout_run(void);
+
 
 int main(void) {
 
@@ -66,25 +68,25 @@ int main(void) {
 
   // xTimerStart(xSoftwareTimer, 0);
 
-  print_freertos_banner();
-  print_mcfg_info();
-  print_soc_status();
-  clocks_setup();
+  //print_freertos_banner();
+  //print_mcfg_info();
+  //print_soc_status();
+  //clocks_setup();
 
   printf("Start Scheduler...\r\n");
+  vout_run();
+  // Wr(EE_SYSCTRL_VGD_CTRL, 0x1234);
+  // int rdata;
+  // rdata = Rd(EE_SYSCTRL_VGD_CTRL);
+  // printf("EE_SYSCTRL_VGD_CTRL: 0x%x\r\n", rdata);
 
-  Wr(EE_SYSCTRL_VGD_CTRL, 0x1234);
-  int rdata;
-  rdata = Rd(EE_SYSCTRL_VGD_CTRL);
-  printf("EE_SYSCTRL_VGD_CTRL: 0x%x\r\n", rdata);
+  // Wr(RDMA_AHB_END_ADDR_3, 0x12345678);
+  // rdata = Rd(RDMA_AHB_END_ADDR_3);
+  // printf("VPU RDMA_AHB_END_ADDR_3: 0x%x\r\n", rdata);
 
-  Wr(RDMA_AHB_END_ADDR_3, 0x12345678);
-  rdata = Rd(RDMA_AHB_END_ADDR_3);
-  printf("VPU RDMA_AHB_END_ADDR_3: 0x%x\r\n", rdata);
-
-  Wr(VOUT_PRE_CMPR_CTRL1, 0x4728abcd);
-  rdata = Rd(VOUT_PRE_CMPR_CTRL1);
-  printf("VOUT VOUT_PRE_CMPR_CTRL1: 0x%x\r\n", rdata);
+  // Wr(VOUT_PRE_CMPR_CTRL1, 0x4728abcd);
+  // rdata = Rd(VOUT_PRE_CMPR_CTRL1);
+  // printf("VOUT VOUT_PRE_CMPR_CTRL1: 0x%x\r\n", rdata);
 
 
 
