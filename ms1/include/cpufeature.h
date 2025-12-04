@@ -1,0 +1,79 @@
+#ifndef __CPUFEATURE_H__
+#define __CPUFEATURE_H__
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+    // NOTE: This header file is used to tell us the Nuclei CPU Feature
+    // Currently for the evalsoc's cpu feature, we manually create this header file
+    // but for our customer, you can use nuclei_gen tool to generate it, and just replace it
+    // If you want to create it on your own, please modify these files:
+    // cpufeature.h, cpufeature.mk, openocd_evalsoc.cfg and evalsoc.memory
+    // and the iar project linker script files *.icf
+
+    // TODO: You can replace this file using the generated one by nuclei_gen tool
+
+    // The CFG_IREGION_BASE_ADDR is only defined in generated cpufeature.h or if you know the
+    // cpu iregion baseaddr you can set it
+
+    // #define CFG_IREGION_BASE_ADDR    YOUR_CPU_IREGION_BASE_ADDR
+
+#define CFG_CPU_SERIES 0xFFFFFF
+#define CFG_CPU_VER 0xFFFFFF
+
+// CPU Features
+#ifndef UNDEF_CFG_TMR_PRIVATE
+#define CFG_TMR_PRIVATE
+#endif
+#ifndef UNDEF_CFG_HAS_CLIC
+#define CFG_HAS_CLIC
+#endif
+// #define CFG_HAS_PLIC
+
+// External Interrupt Number
+#define CFG_IRQ_NUM 96
+
+// ECLIC interrupt control bits (4 bits for level + priority)
+#define CFG_CLICINTCTLBITS 3
+
+#define UNDEF_CFG_HAS_SMP
+#ifndef UNDEF_CFG_HAS_SMP
+#define CFG_HAS_SMP
+#endif
+
+#define UNDEF_CFG_HAS_PMP
+#ifndef UNDEF_CFG_HAS_PMP
+#define CFG_HAS_PMP
+#endif
+
+#define CFG_PMP_ENTRY_NUM 8
+
+// #define CFG_HAS_IDU
+// #define CFG_HAS_TEE
+// #define CFG_HAS_SMPU
+#define CFG_HAS_STACK_CHECK
+
+// for Scalar/Vector custom instruction extension
+// #define CFG_HAS_NICE
+// #define CFG_HAS_VNICE
+
+#define CFG_HAS_ICACHE
+// #define CFG_HAS_DCACHE
+
+// CCM default still set to 0, you can uncomment it when it really exist
+// #define CFG_HAS_IOCC
+#define CFG_ILM_BASE_ADDR (0xF9000000UL)
+#define CFG_DLM_BASE_ADDR (0xF9008000UL)
+
+// EVALSOC Features
+#define EVALSOC_FLASH_XIP_BASE (0xF0000000UL)
+#define EVALSOC_SYSMEM_BASE (0xF4000000UL) // system sram / ddr base
+#define EVALSOC_PERIPS_BASE (0xFE000000UL)
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

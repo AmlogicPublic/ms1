@@ -11,7 +11,9 @@
 
 // #include "soc.h"
 // #include "Drivers/uart/uart.h"
+#include "Drivers/vpu/vpu_irq.h"
 #include "Drivers/clock_tree/clock_tree.h"
+
 
 #define mainSOFTWARE_TIMER_PERIOD_MS pdMS_TO_TICKS(500) // ms -> ticks
 #define mainQUEUE_LENGTH (1)
@@ -36,6 +38,7 @@ extern volatile uint32_t SystemCoreClock; // will be updated during boot
 extern volatile uint32_t BAUD_RATE;       // will be updated during boot
 extern void _start(void);                 // CPU reset entry point from linker script
 extern void vout_run(void);
+extern void vpu_run(void);
 
 
 int main(void) {
@@ -68,13 +71,17 @@ int main(void) {
 
   // xTimerStart(xSoftwareTimer, 0);
 
-  //print_freertos_banner();
-  //print_mcfg_info();
-  //print_soc_status();
-  //clocks_setup();
+ // print_freertos_banner();
+ // print_mcfg_info();
+ // print_soc_status();
+ // clocks_setup();
 
   printf("Start Scheduler...\r\n");
+  vpu_irq_init();
+  vpu_run();
   vout_run();
+  printf("End Scheduler...\r\n");
+  //HW_Initialize();
   // Wr(EE_SYSCTRL_VGD_CTRL, 0x1234);
   // int rdata;
   // rdata = Rd(EE_SYSCTRL_VGD_CTRL);
