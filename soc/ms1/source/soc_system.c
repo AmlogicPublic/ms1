@@ -189,7 +189,7 @@ const unsigned long vector_table_s[SOC_INT_MAX] __SMODE_VECTOR_ATTR = {
  * the debugger.
  */
 volatile uint32_t SystemCoreClock = SYSTEM_CLOCK; /* System Clock Frequency (Core Clock) */
-volatile uint32_t BAUD_RATE = 1152000;             /* System Clock Frequency (Core Clock) */
+volatile uint32_t BAUD_RATE = 115200;             /* System Clock Frequency (Core Clock) */
 
 /*----------------------------------------------------------------------------
   Clock functions

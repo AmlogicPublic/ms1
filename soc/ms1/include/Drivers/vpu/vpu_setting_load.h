@@ -8,8 +8,8 @@
  *  Created: 07/09/2025
  *
  *******************************************************************/
-#ifndef VOUT_SETTING_LOAD_H
-#define VOUT_SETTING_LOAD_H
+#ifndef VPU_SETTING_LOAD_H
+#define VPU_SETTING_LOAD_H
 
 /**
  * @brief Load VOUT settings from fpga_sim_setting.txt file
@@ -21,7 +21,7 @@
  * 
  * @return 0 on success, -1 on error
  */
-int vout_setting_load(void);
+int vpu_setting_load(void);
 
-#endif /* VOUT_SETTING_LOAD_H */
+#endif /* VPU_SETTING_LOAD_H */
 
